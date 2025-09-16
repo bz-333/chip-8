@@ -11,7 +11,6 @@ int main(int argc, char* argv[]) {
 
     bool quit = false;
     SDL_Event e;
-    const int cycles_per_frame = 10;
 
     while (!quit) {
         while (SDL_PollEvent(&e)) {
@@ -22,9 +21,6 @@ int main(int argc, char* argv[]) {
         chip8.cycle();
 
         if (chip8.draw) {
-            for (auto i : chip8.display) {
-                std::cout << static_cast<int>(i);
-            }
             renderer.render(chip8.display);
             chip8.draw = false;
         }
