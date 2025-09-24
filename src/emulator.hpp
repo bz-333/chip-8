@@ -9,17 +9,8 @@ const unsigned int DISPLAY_HEIGHT = 32;
 const unsigned int REGISTER_COUNT = 16;
 const unsigned int FONT_SIZE = 80;
 
-struct Emulator {
-    std::array<std::uint8_t, MEMORY_SIZE> memory{};
-    std::array<std::uint8_t, DISPLAY_WIDTH * DISPLAY_HEIGHT> display{};
-    std::uint16_t pc{};
-    std::uint16_t index{};
-    std::stack<std::uint16_t> call_stack;
-    std::uint8_t delay{};
-    std::uint8_t sound{};
-    std::array<std::uint8_t, REGISTER_COUNT> registers{};
-    bool draw{};
-
+class Emulator {
+public:
     static constexpr std::array<uint8_t, FONT_SIZE> font{
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
         0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -47,6 +38,12 @@ struct Emulator {
 
     void decode_and_execute(std::uint16_t opcode);
 
+    const std::array<std::uint8_t, DISPLAY_WIDTH * DISPLAY_HEIGHT>& get_display();
+
+    bool should_draw();
+
+    void set_draw(bool should_draw);
+
     void op_00E0();
 
     void op_00EE();
@@ -71,4 +68,14 @@ struct Emulator {
 
     void op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N);
 
+private:
+    std::array<std::uint8_t, MEMORY_SIZE> memory{};
+    std::array<std::uint8_t, DISPLAY_WIDTH * DISPLAY_HEIGHT> display{};
+    std::uint16_t pc{};
+    std::uint16_t index{};
+    std::stack<std::uint16_t> call_stack;
+    std::uint8_t delay{};
+    std::uint8_t sound{};
+    std::array<std::uint8_t, REGISTER_COUNT> registers{};
+    bool draw{};
 };

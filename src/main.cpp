@@ -20,9 +20,9 @@ int main(int argc, char* argv[]) {
 
         chip8.cycle();
 
-        if (chip8.draw) {
-            renderer.render(chip8.display);
-            chip8.draw = false;
+        if (chip8.should_draw()) {
+            renderer.render(chip8.get_display());
+            chip8.set_draw(false);
         }
 
         SDL_Delay(1);

@@ -93,6 +93,18 @@ void Emulator::decode_and_execute(std::uint16_t opcode) {
     }
 }
 
+const std::array<uint8_t, DISPLAY_WIDTH * DISPLAY_HEIGHT>& Emulator::get_display() {
+    return display;
+}
+
+bool Emulator::should_draw() {
+    return draw;
+}
+
+void Emulator::set_draw(bool should_draw) {
+    draw = should_draw;
+}
+
 void Emulator::op_00E0() {
     std::fill(display.begin(), display.end(), 0);
 }
