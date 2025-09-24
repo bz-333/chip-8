@@ -61,15 +61,28 @@ void Emulator::decode_and_execute(std::uint16_t opcode) {
             }
             break;
         case 0x1000u:
-            op_1NNN(opcode);
+            op_1NNN(NNN);
             break;
         case 0x2000u:
+            op_2NNN(NNN);
+            break;
+        case 0x3000u:
+            op_3XNN(X, NN);
+            break;
+        case 0x4000u:
+            op_4XNN(X, NN);
+            break;
+        case 0x5000u:
+            op_5XY0(X, Y);
             break;
         case 0x6000u:
             op_6XNN(X, NN);
             break;
         case 0x7000u:
             op_7XNN(X, NN);
+            break;
+        case 0x9000u:
+            op_9XY0(X, Y);
             break;
         case 0xA000u:
             op_ANNN(NNN);
@@ -85,11 +98,35 @@ void Emulator::op_00E0() {
 }
 
 void Emulator::op_00EE() {
-
+    pc = call_stack.top();
+    call_stack.pop();
 }
 
 void Emulator::op_1NNN(std::uint16_t NNN) {
     pc = NNN;
+}
+
+void Emulator::op_2NNN(std::uint16_t NNN) {
+    call_stack.push(pc);
+    pc = NNN;
+}
+
+void Emulator::op_3XNN(std::uint8_t X, std::uint8_t NN) {
+    if (registers[X] == NN) {
+        pc += 2;
+    }
+}
+
+void Emulator::op_4XNN(std::uint8_t X, std::uint8_t NN) {
+    if (registers[X] != NN) {
+        pc += 2;
+    }
+}
+
+void Emulator::op_5XY0(std::uint8_t X, std::uint8_t Y) {
+    if (registers[X] == registers[Y]) {
+        pc += 2;
+    }
 }
 
 void Emulator::op_6XNN(std::uint8_t X, std::uint8_t NN) {
@@ -98,6 +135,12 @@ void Emulator::op_6XNN(std::uint8_t X, std::uint8_t NN) {
 
 void Emulator::op_7XNN(std::uint8_t X, std::uint8_t NN) {
     registers[X] += NN;
+}
+
+void Emulator::op_9XY0(std::uint8_t X, std::uint8_t Y) {
+    if (registers[X] != registers[Y]) {
+        pc += 2;
+    }
 }
 
 void Emulator::op_ANNN(std::uint16_t NNN) {

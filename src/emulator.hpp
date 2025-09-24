@@ -55,9 +55,17 @@ struct Emulator {
 
     void op_2NNN(std::uint16_t NNN);
 
+    void op_3XNN(std::uint8_t X, std::uint8_t NN);
+
+    void op_4XNN(std::uint8_t X, std::uint8_t NN);
+
+    void op_5XY0(std::uint8_t X, std::uint8_t Y);
+
     void op_6XNN(std::uint8_t X, std::uint8_t NN);
 
     void op_7XNN(std::uint8_t X, std::uint8_t NN);
+
+    void op_9XY0(std::uint8_t X, std::uint8_t Y);
 
     void op_ANNN(std::uint16_t NNN);
 
