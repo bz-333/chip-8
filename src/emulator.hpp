@@ -2,12 +2,13 @@
 #include <array>
 #include <stack>
 #include <filesystem>
+#include "constants.hpp"
 
-const unsigned int MEMORY_SIZE = 4096;
-const unsigned int DISPLAY_WIDTH = 64;
-const unsigned int DISPLAY_HEIGHT = 32;
-const unsigned int REGISTER_COUNT = 16;
-const unsigned int FONT_SIZE = 80;
+constexpr unsigned int MEMORY_SIZE = 4096;
+constexpr unsigned int REGISTER_COUNT = 16;
+constexpr unsigned int FONT_SIZE = 80;
+const unsigned int START_ADDRESS = 0x200;
+const unsigned int FONT_START_ADDRESS = 0x50;
 
 class Emulator {
 public:
@@ -38,7 +39,7 @@ public:
 
     void decode_and_execute(std::uint16_t opcode);
 
-    const std::array<std::uint8_t, DISPLAY_WIDTH * DISPLAY_HEIGHT>& get_display();
+    const std::array<std::uint8_t, constants::DISPLAY_WIDTH * constants::DISPLAY_HEIGHT>& get_display();
 
     bool should_draw();
 
@@ -70,7 +71,7 @@ public:
 
 private:
     std::array<std::uint8_t, MEMORY_SIZE> memory{};
-    std::array<std::uint8_t, DISPLAY_WIDTH * DISPLAY_HEIGHT> display{};
+    std::array<std::uint8_t, constants::DISPLAY_WIDTH * constants::DISPLAY_HEIGHT> display{};
     std::uint16_t pc{};
     std::uint16_t index{};
     std::stack<std::uint16_t> call_stack;

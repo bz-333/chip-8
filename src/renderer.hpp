@@ -1,9 +1,8 @@
 #include <SDL2/SDL.h>
 #include <array>
 #include <cstdint>
+#include "constants.hpp"
 
-constexpr int CHIP8_WIDTH  = 64;
-constexpr int CHIP8_HEIGHT = 32;
 constexpr int PIXEL_SCALE  = 10;
 
 class Renderer {
@@ -11,7 +10,7 @@ public:
     Renderer(const char* title);
     ~Renderer();
 
-    void render(const std::array<uint8_t, CHIP8_WIDTH * CHIP8_HEIGHT>& display);
+    void render(const std::array<uint8_t, constants::DISPLAY_WIDTH * constants::DISPLAY_HEIGHT>& display);
     void clear();
 
 private:

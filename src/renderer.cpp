@@ -1,3 +1,4 @@
+#include "constants.hpp"
 #include "renderer.hpp"
 
 Renderer::Renderer(const char* title) {
@@ -5,8 +6,8 @@ Renderer::Renderer(const char* title) {
     window = SDL_CreateWindow(title,
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
-                              CHIP8_WIDTH * PIXEL_SCALE,
-                              CHIP8_HEIGHT * PIXEL_SCALE,
+                              constants::DISPLAY_WIDTH * PIXEL_SCALE,
+                              constants::DISPLAY_HEIGHT * PIXEL_SCALE,
                               SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
@@ -22,13 +23,13 @@ void Renderer::clear() {
     SDL_RenderClear(renderer);
 }
 
-void Renderer::render(const std::array<uint8_t, CHIP8_WIDTH * CHIP8_HEIGHT>& display) {
+void Renderer::render(const std::array<uint8_t, constants::DISPLAY_WIDTH * constants::DISPLAY_HEIGHT>& display) {
     clear();
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    for (int y = 0; y < CHIP8_HEIGHT; ++y) {
-        for (int x = 0; x < CHIP8_WIDTH; ++x) {
-            if (display[x + y * CHIP8_WIDTH]) {
+    for (int y = 0; y < constants::DISPLAY_HEIGHT; ++y) {
+        for (int x = 0; x < constants::DISPLAY_WIDTH; ++x) {
+            if (display[x + y * constants::DISPLAY_WIDTH]) {
                 SDL_Rect rect = { x * PIXEL_SCALE, y * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE };
                 SDL_RenderFillRect(renderer, &rect);
             }

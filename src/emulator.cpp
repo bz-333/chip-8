@@ -3,9 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
-
-const unsigned int START_ADDRESS = 0x200;
-const unsigned int FONT_START_ADDRESS = 0x50;
+#include "constants.hpp"
 
 Emulator::Emulator() {
     pc = START_ADDRESS;
@@ -93,7 +91,7 @@ void Emulator::decode_and_execute(std::uint16_t opcode) {
     }
 }
 
-const std::array<uint8_t, DISPLAY_WIDTH * DISPLAY_HEIGHT>& Emulator::get_display() {
+const std::array<uint8_t, constants::DISPLAY_WIDTH * constants::DISPLAY_HEIGHT>& Emulator::get_display() {
     return display;
 }
 
@@ -160,19 +158,19 @@ void Emulator::op_ANNN(std::uint16_t NNN) {
 }
 
 void Emulator::op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N) {
-    const std::uint8_t x_coord = registers[X] % DISPLAY_WIDTH;
-    const std::uint8_t y_coord = registers[Y] % DISPLAY_HEIGHT;
+    const std::uint8_t x_coord = registers[X] % constants::DISPLAY_WIDTH;
+    const std::uint8_t y_coord = registers[Y] % constants::DISPLAY_HEIGHT;
 
     registers[0xF] = 0u;
 
-    for (std::uint8_t i = 0u; i < N && y_coord + i < DISPLAY_HEIGHT; ++i) {
+    for (std::uint8_t i = 0u; i < N && y_coord + i < constants::DISPLAY_HEIGHT; ++i) {
         const std::uint8_t sprite_row = memory[index + i];
-        for (std::uint8_t j = 0u; j < 8u && x_coord + j < DISPLAY_WIDTH; ++j) {
+        for (std::uint8_t j = 0u; j < 8u && x_coord + j < constants::DISPLAY_WIDTH; ++j) {
             if (!(sprite_row & (0x80 >> j))) {
                 continue;
             }
 
-            const std::uint16_t display_index = (DISPLAY_WIDTH * (y_coord + i)) + (x_coord + j);
+            const std::uint16_t display_index = (constants::DISPLAY_WIDTH * (y_coord + i)) + (x_coord + j);
             if (display[display_index]) {
                 display[display_index] = 0u;
                 registers[0xF] = 1u;
