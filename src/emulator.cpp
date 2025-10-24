@@ -265,6 +265,26 @@ void Emulator::op_FX07(std::uint8_t X) {
     delay_last_access = current_time;
 }
 
+void Emulator::op_EX9E(std::uint8_t X) {
+    if (keypad.is_pressed(registers[X])) {
+        pc += 2;
+    }
+}
+
+void Emulator::op_EXA1(std::uint8_t X) {
+    if (!keypad.is_pressed(registers[X])) {
+        pc += 2;
+    }
+}
+
+void Emulator::op_FX0A(std::uint8_t X) {
+    if (auto key = keypad.get_pressed()) {
+        registers[X] = key.value();
+    } else {
+        pc -= 2;
+    }
+}
+
 void Emulator::op_FX15(std::uint8_t X) {
     delay = registers[X];
     delay_last_access = std::chrono::steady_clock::now();
@@ -273,3 +293,10 @@ void Emulator::op_FX15(std::uint8_t X) {
 void Emulator::op_FX18(std::uint8_t X) {
 
 }
+
+void op_FX1E(std::uint8_t X);
+
+void op_FX29(std::uint8_t X);
+void op_FX33(std::uint8_t X);
+void op_FX55(std::uint8_t X);
+void op_FX65(std::uint8_t X);

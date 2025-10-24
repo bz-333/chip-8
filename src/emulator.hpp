@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <chrono>
 #include "constants.hpp"
+#include "keypad.hpp"
 
 constexpr unsigned int MEMORY_SIZE = 4096;
 constexpr unsigned int REGISTER_COUNT = 16;
@@ -82,6 +83,7 @@ private:
     std::array<std::uint8_t, REGISTER_COUNT> registers{};
     bool draw{};
     std::chrono::steady_clock::time_point delay_last_access{std::chrono::steady_clock::now()};
+    Keypad keypad{};
 
     static constexpr std::array<uint8_t, FONT_SIZE> font{
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
