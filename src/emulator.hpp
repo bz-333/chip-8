@@ -2,6 +2,7 @@
 #include <array>
 #include <stack>
 #include <filesystem>
+#include <chrono>
 #include "constants.hpp"
 
 constexpr unsigned int MEMORY_SIZE = 4096;
@@ -123,4 +124,5 @@ private:
     std::uint8_t sound{};
     std::array<std::uint8_t, REGISTER_COUNT> registers{};
     bool draw{};
+    std::chrono::steady_clock::time_point delay_last_access{std::chrono::steady_clock::now()};
 };

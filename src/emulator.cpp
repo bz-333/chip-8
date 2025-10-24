@@ -251,3 +251,25 @@ void Emulator::op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N) {
 
     draw = true;
 }
+
+void Emulator::op_FX07(std::uint8_t X) {
+    auto current_time = std::chrono::steady_clock::now();
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - delay_last_access).count();
+    auto num_ticks = static_cast<unsigned>(elapsed_time * 60.0);
+    if (num_ticks >= delay) {
+        delay = 0u;
+    } else {
+        delay -= num_ticks;
+    }
+    registers[X] = delay;
+    delay_last_access = current_time;
+}
+
+void Emulator::op_FX15(std::uint8_t X) {
+    delay = registers[X];
+    delay_last_access = std::chrono::steady_clock::now();
+}
+
+void Emulator::op_FX18(std::uint8_t X) {
+
+}
