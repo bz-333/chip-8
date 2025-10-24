@@ -3,6 +3,8 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
+#include <random>
+#include <limits>
 #include "constants.hpp"
 
 Emulator::Emulator() {
@@ -215,6 +217,12 @@ void Emulator::op_ANNN(std::uint16_t NNN) {
 
 void Emulator::op_BNNN(std::uint16_t NNN) {
     pc = NNN + registers[0];
+}
+
+void Emulator::op_CXNN(std::uint8_t X, std::uint8_t NN) {
+    std::mt19937 engine{std::random_device{}()};
+    std::uniform_int_distribution<uint8_t> dist{std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max()};
+    registers[X] = dist(engine) & NN;
 }
 
 void Emulator::op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N) {

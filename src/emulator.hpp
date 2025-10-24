@@ -87,7 +87,7 @@ public:
 
     void op_BNNN(std::uint16_t NNN);
 
-    void op_CXNN(std::uint16_t NNN);
+    void op_CXNN(std::uint8_t X, std::uint8_t NN);
 
     void op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N);
 
