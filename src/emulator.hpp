@@ -63,11 +63,55 @@ public:
 
     void op_7XNN(std::uint8_t X, std::uint8_t NN);
 
+    void op_8XY0(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XY1(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XY2(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XY3(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XY4(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XY5(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XY6(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XY7(std::uint8_t X, std::uint8_t Y);
+
+    void op_8XYE(std::uint8_t X, std::uint8_t Y);
+
     void op_9XY0(std::uint8_t X, std::uint8_t Y);
 
     void op_ANNN(std::uint16_t NNN);
 
+    void op_BNNN(std::uint16_t NNN);
+
+    void op_CXNN(std::uint16_t NNN);
+
     void op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N);
+
+    void op_EX9E(std::uint8_t X);
+
+    void op_EXA1(std::uint8_t X);
+
+    void op_FX07(std::uint8_t X);
+
+    void op_FX15(std::uint8_t X);
+
+    void op_FX18(std::uint8_t X);
+
+    void op_FX1E(std::uint8_t X);
+
+    void op_FX0A(std::uint8_t X);
+
+    void op_FX29(std::uint8_t X);
+
+    void op_FX33(std::uint8_t X);
+
+    void op_FX55(std::uint8_t X);
+
+    void op_FX65(std::uint8_t X);
 
 private:
     std::array<std::uint8_t, MEMORY_SIZE> memory{};

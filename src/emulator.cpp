@@ -55,6 +55,7 @@ void Emulator::decode_and_execute(std::uint16_t opcode) {
                     op_00E0();
                     break;
                 case 0xEEu:
+                    op_00EE();
                     break;
             }
             break;
@@ -147,6 +148,61 @@ void Emulator::op_7XNN(std::uint8_t X, std::uint8_t NN) {
     registers[X] += NN;
 }
 
+void Emulator::op_8XY0(std::uint8_t X, std::uint8_t Y) {
+    registers[X] = registers[Y];
+}
+
+void Emulator::op_8XY1(std::uint8_t X, std::uint8_t Y) {
+    registers[X] |= registers[Y];
+}
+
+void Emulator::op_8XY2(std::uint8_t X, std::uint8_t Y) {
+    registers[X] &= registers[Y];
+}
+
+void Emulator::op_8XY3(std::uint8_t X, std::uint8_t Y) {
+    registers[X] ^= registers[Y];
+}
+
+void Emulator::op_8XY4(std::uint8_t X, std::uint8_t Y) {
+    if (static_cast<std::uint16_t>(registers[X]) + Y > 255u) {
+        registers[0xF] = 1u;
+    } else {
+        registers[0xF] = 0u;
+    }
+    registers[X] += registers[Y];
+}
+
+void Emulator::op_8XY5(std::uint8_t X, std::uint8_t Y) {
+    if (registers[X] > registers[Y]) {
+        registers[0xF] = 1u;
+    } else {
+        registers[0xF] = 0u;
+    }
+    registers[X] -= registers[Y];
+}
+
+void Emulator::op_8XY6(std::uint8_t X, std::uint8_t Y) {
+    std::uint8_t shifted_out = registers[X] & 0x1u;
+    registers[X] >>= 1;
+    registers[0xF] = shifted_out;
+}
+
+void Emulator::op_8XY7(std::uint8_t X, std::uint8_t Y) {
+    if (registers[Y] > registers[X]) {
+        registers[0xF] = 1u;
+    } else {
+        registers[0xF] = 0u;
+    }
+    registers[X] = registers[Y] - registers[X];
+}
+
+void Emulator::op_8XYE(std::uint8_t X, std::uint8_t Y) {
+    std::uint8_t shifted_out = registers[X] & 0x80u;
+    registers[X] <<= 1;
+    registers[0xF] = shifted_out;
+}
+
 void Emulator::op_9XY0(std::uint8_t X, std::uint8_t Y) {
     if (registers[X] != registers[Y]) {
         pc += 2;
@@ -155,6 +211,10 @@ void Emulator::op_9XY0(std::uint8_t X, std::uint8_t Y) {
 
 void Emulator::op_ANNN(std::uint16_t NNN) {
     index = NNN;
+}
+
+void Emulator::op_BNNN(std::uint16_t NNN) {
+    pc = NNN + registers[0];
 }
 
 void Emulator::op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N) {
