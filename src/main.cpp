@@ -1,28 +1,24 @@
 #include <SDL2/SDL.h>
 #include "emulator.hpp"
 #include "renderer.hpp"
+#include "input_handler.hpp"
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-    Emulator chip8;
-    chip8.load_rom("roms/ibm-logo.ch8");
+    Emulator emulator;
+    emulator.load_rom("roms/ibm-logo.ch8");
 
     Renderer renderer("CHIP-8");
+    InputHandler input_handler;
 
-    bool quit = false;
-    SDL_Event e;
+    while (input_handler) {
+        input_handler.process_input(emulator.get_keypad());
 
-    while (!quit) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) quit = true;
-            // TODO: map keyboard events to chip8 keys
-        }
+        emulator.cycle();
 
-        chip8.cycle();
-
-        if (chip8.should_draw()) {
-            renderer.render(chip8.get_display());
-            chip8.set_draw(false);
+        if (emulator.should_draw()) {
+            renderer.render(emulator.get_display());
+            emulator.set_draw(false);
         }
 
         SDL_Delay(1);

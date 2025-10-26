@@ -10,7 +10,7 @@ endif()
 
 find_package(SDL2 REQUIRED)
 
-add_executable(chip-8 src/main.cpp src/emulator.cpp src/renderer.cpp)
+add_executable(chip-8 src/main.cpp src/emulator.cpp src/renderer.cpp src/input_handler.cpp src/keypad.cpp)
 
 target_include_directories(chip-8 PRIVATE ${SDL2_INCLUDE_DIRS})
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 #include <array>
 #include <stack>
@@ -23,6 +25,9 @@ public:
     const std::array<std::uint8_t, constants::DISPLAY_WIDTH * constants::DISPLAY_HEIGHT>& get_display();
     bool should_draw();
     void set_draw(bool should_draw);
+
+    Keypad& get_keypad();
+    const Keypad& get_keypad() const;
 
     void op_00E0();
     void op_00EE();

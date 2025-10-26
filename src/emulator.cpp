@@ -91,6 +91,11 @@ void Emulator::decode_and_execute(std::uint16_t opcode) {
         case 0xD000u:
             op_DXYN(X, Y, N);
             break;
+        case 0xE000u:
+            // TODO
+            break;
+        case 0xF000u:
+            break;
     }
 }
 
@@ -104,6 +109,14 @@ bool Emulator::should_draw() {
 
 void Emulator::set_draw(bool should_draw) {
     draw = should_draw;
+}
+
+Keypad& Emulator::get_keypad() {
+    return keypad;
+}
+
+const Keypad& Emulator::get_keypad() const {
+    return keypad;
 }
 
 void Emulator::op_00E0() {
@@ -221,7 +234,7 @@ void Emulator::op_BNNN(std::uint16_t NNN) {
 
 void Emulator::op_CXNN(std::uint8_t X, std::uint8_t NN) {
     std::mt19937 engine{std::random_device{}()};
-    std::uniform_int_distribution<uint8_t> dist{std::numeric_limits<uint8_t>::min(), std::numeric_limits<uint8_t>::max()};
+    std::uniform_int_distribution<unsigned> dist{std::numeric_limits<std::uint8_t>::min(), std::numeric_limits<std::uint8_t>::max()};
     registers[X] = dist(engine) & NN;
 }
 
@@ -252,6 +265,19 @@ void Emulator::op_DXYN(std::uint8_t X, std::uint8_t Y, std::uint8_t N) {
     draw = true;
 }
 
+void Emulator::op_EX9E(std::uint8_t X) {
+    if (keypad.is_pressed(registers[X])) {
+        pc += 2;
+    }
+}
+
+void Emulator::op_EXA1(std::uint8_t X) {
+    if (!keypad.is_pressed(registers[X])) {
+        pc += 2;
+    }
+}
+
+
 void Emulator::op_FX07(std::uint8_t X) {
     auto current_time = std::chrono::steady_clock::now();
     auto elapsed_time = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - delay_last_access).count();
@@ -263,18 +289,6 @@ void Emulator::op_FX07(std::uint8_t X) {
     }
     registers[X] = delay;
     delay_last_access = current_time;
-}
-
-void Emulator::op_EX9E(std::uint8_t X) {
-    if (keypad.is_pressed(registers[X])) {
-        pc += 2;
-    }
-}
-
-void Emulator::op_EXA1(std::uint8_t X) {
-    if (!keypad.is_pressed(registers[X])) {
-        pc += 2;
-    }
 }
 
 void Emulator::op_FX0A(std::uint8_t X) {
