@@ -82,19 +82,92 @@ void Emulator::decode_and_execute(std::uint16_t opcode) {
         case 0x7000u:
             op_7XNN(X, NN);
             break;
+        case 0x8000u:
+            switch (N) {
+                case 0x0u:
+                    op_8XY0(X, Y);
+                    break;
+                case 0x1u:
+                    op_8XY1(X, Y);
+                    break;
+                case 0x2u:
+                    op_8XY2(X, Y);
+                    break;
+                case 0x3u:
+                    op_8XY3(X, Y);
+                    break;
+                case 0x4u:
+                    op_8XY4(X, Y);
+                    break;
+                case 0x5u:
+                    op_8XY5(X, Y);
+                    break;
+                case 0x6u:
+                    op_8XY6(X, Y);
+                    break;
+                case 0x7u:
+                    op_8XY7(X, Y);
+                    break;
+                case 0xEu:
+                    op_8XYE(X, Y);
+                    break;
+            }
+            break;
         case 0x9000u:
             op_9XY0(X, Y);
             break;
         case 0xA000u:
             op_ANNN(NNN);
             break;
+        case 0xB000u:
+            op_BNNN(NNN);
+            break;
+        case 0xC000u:
+            op_CXNN(X, NN);
+            break;
         case 0xD000u:
             op_DXYN(X, Y, N);
             break;
         case 0xE000u:
-            // TODO
+            switch (NN) {
+                case 0x9Eu:
+                    op_EX9E(X);
+                    break;
+                case 0xA1u:
+                    op_EXA1(X);
+                    break;
+            }
             break;
         case 0xF000u:
+            switch (NN) {
+                case 0x07u:
+                    op_FX07(X);
+                    break;
+                case 0x0Au:
+                    op_FX0A(X);
+                    break;
+                case 0x15u:
+                    op_FX15(X);
+                    break;
+                case 0x18u:
+                    op_FX18(X);
+                    break;
+                case 0x1Eu:
+                    op_FX1E(X);
+                    break;
+                case 0x29u:
+                    op_FX29(X);
+                    break;
+                case 0x33u:
+                    op_FX33(X);
+                    break;
+                case 0x55u:
+                    op_FX55(X);
+                    break;
+                case 0x65u:
+                    op_FX65(X);
+                    break;
+            }
             break;
     }
 }
@@ -305,12 +378,41 @@ void Emulator::op_FX15(std::uint8_t X) {
 }
 
 void Emulator::op_FX18(std::uint8_t X) {
-
+    sound = registers[X];
 }
 
-void op_FX1E(std::uint8_t X);
+void Emulator::op_FX1E(std::uint8_t X) {
+    index += registers[X];
+    auto overflow = index & 0xF000u;
+    if (overflow) {
+        registers[0xF] = 1u;
+    }
+}
 
-void op_FX29(std::uint8_t X);
-void op_FX33(std::uint8_t X);
-void op_FX55(std::uint8_t X);
-void op_FX65(std::uint8_t X);
+void Emulator::op_FX29(std::uint8_t X) {
+    auto hex_character = registers[X] & 0xFu;
+    index = FONT_START_ADDRESS + (5u * hex_character);
+}
+
+void Emulator::op_FX33(std::uint8_t X) {
+    std::uint8_t vx = registers[X];
+    memory[index + 2] = vx % 10;
+    vx /= 10;
+
+    memory[index + 1] = vx % 10;
+    vx /= 10;
+    
+    memory[index] = vx % 10;
+}
+
+void Emulator::op_FX55(std::uint8_t X) {
+    for (auto i = 0; i <= X; ++i) {
+        memory[index + i] = registers[i];
+    }
+}
+
+void Emulator::op_FX65(std::uint8_t X) {
+    for (auto i = 0; i <= X; ++i) {
+        registers[i] = memory[index + i];
+    }
+}
