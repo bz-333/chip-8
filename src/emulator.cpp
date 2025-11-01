@@ -253,21 +253,25 @@ void Emulator::op_8XY3(std::uint8_t X, std::uint8_t Y) {
 }
 
 void Emulator::op_8XY4(std::uint8_t X, std::uint8_t Y) {
-    if (static_cast<std::uint16_t>(registers[X]) + Y > 255u) {
-        registers[0xF] = 1u;
+    std::uint8_t flag = 0u;
+    if (static_cast<std::uint16_t>(registers[X]) + registers[Y] > 255u) {
+        flag = 1u;
     } else {
-        registers[0xF] = 0u;
+        flag = 0u;
     }
     registers[X] += registers[Y];
+    registers[0xF] = flag;
 }
 
 void Emulator::op_8XY5(std::uint8_t X, std::uint8_t Y) {
-    if (registers[X] > registers[Y]) {
-        registers[0xF] = 1u;
+    std::uint8_t flag = 0u;
+    if (registers[X] >= registers[Y]) {
+        flag = 1u;
     } else {
-        registers[0xF] = 0u;
+        flag = 0u;
     }
     registers[X] -= registers[Y];
+    registers[0xF] = flag;
 }
 
 void Emulator::op_8XY6(std::uint8_t X, std::uint8_t Y) {
@@ -277,16 +281,18 @@ void Emulator::op_8XY6(std::uint8_t X, std::uint8_t Y) {
 }
 
 void Emulator::op_8XY7(std::uint8_t X, std::uint8_t Y) {
-    if (registers[Y] > registers[X]) {
-        registers[0xF] = 1u;
+    std::uint8_t flag = 0u;
+    if (registers[Y] >= registers[X]) {
+        flag = 1u;
     } else {
-        registers[0xF] = 0u;
+        flag = 0u;
     }
     registers[X] = registers[Y] - registers[X];
+    registers[0xF] = flag;
 }
 
 void Emulator::op_8XYE(std::uint8_t X, std::uint8_t Y) {
-    std::uint8_t shifted_out = registers[X] & 0x80u;
+    std::uint8_t shifted_out = (registers[X] & 0x80u) >> 7;
     registers[X] <<= 1;
     registers[0xF] = shifted_out;
 }

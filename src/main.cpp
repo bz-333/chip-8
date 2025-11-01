@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[]) {
     Emulator emulator;
-    emulator.load_rom("roms/3-corax+.ch8");
+    emulator.load_rom("roms/4-flags.ch8");
 
     Renderer renderer("CHIP-8");
     InputHandler input_handler;
